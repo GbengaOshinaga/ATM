@@ -71,7 +71,7 @@
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -84,63 +84,73 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// BankDatabase class that acts as an interface between account the rest of the application
 var BankDatabase = function () {
-    function BankDatabase() {
-        _classCallCheck(this, BankDatabase);
+  function BankDatabase() {
+    _classCallCheck(this, BankDatabase);
 
-        var firstAccount = new _Account2.default(12345, 1111, 2000, 2000);
-        var secondAccount = new _Account2.default(67890, 2222, 3000, 3000);
-        this.accounts = [firstAccount, secondAccount];
+    var firstAccount = new _Account2.default(12345, 1111, 2000, 2000);
+    var secondAccount = new _Account2.default(67890, 2222, 3000, 3000);
+    this.accounts = [firstAccount, secondAccount];
+  }
+
+  // Get user account number
+
+
+  _createClass(BankDatabase, [{
+    key: 'getAccountNumber',
+    value: function getAccountNumber(acNumber) {
+      var result = void 0;
+      for (var i in this.accounts) {
+        if (this.accounts[i].getAccountNumber() === acNumber) {
+          result = this.accounts[i];
+        }
+      }
+      return result;
     }
 
-    _createClass(BankDatabase, [{
-        key: 'getAccountNumber',
-        value: function getAccountNumber(acNumber) {
-            var result = void 0;
-            for (var i in this.accounts) {
-                if (this.accounts[i].getAccountNumber() === acNumber) {
-                    result = this.accounts[i];
-                }
-            }
-            return result;
-        }
-    }, {
-        key: 'authenticateUser',
-        value: function authenticateUser(acNumber, pin) {
-            var account = this.getAccountNumber(acNumber);
+    // Authenticate the user
 
-            if (account !== undefined) {
-                return account.validatePin(pin);
-            } else {
-                return false;
-            }
-        }
-    }, {
-        key: 'getBalance',
-        value: function getBalance(accNumber) {
-            var account = this.getAccountNumber(accNumber);
+  }, {
+    key: 'authenticateUser',
+    value: function authenticateUser(acNumber, pin) {
+      var account = this.getAccountNumber(acNumber);
 
-            if (account !== undefined) {
-                return account.getBalance();
-            } else {
-                return 0;
-            }
-        }
-    }, {
-        key: 'withdraw',
-        value: function withdraw(accNumber, amount) {
-            var account = this.getAccountNumber(accNumber);
+      if (account !== undefined) {
+        return account.validatePin(pin);
+      }
+      return false;
+    }
 
-            if (account !== undefined) {
-                account.debit(amount);
-                return account.getBalance();
-            } else {
-                return 0;
-            }
-        }
-    }]);
+    // Get account balance
 
-    return BankDatabase;
+  }, {
+    key: 'getBalance',
+    value: function getBalance(accNumber) {
+      var account = this.getAccountNumber(accNumber);
+
+      if (account !== undefined) {
+        return account.getBalance();
+      }
+      return 0;
+    }
+
+    // Withdraw a specified amount from the account
+
+  }, {
+    key: 'withdraw',
+    value: function withdraw(accNumber, amount) {
+      var account = this.getAccountNumber(accNumber);
+
+      if (account !== undefined) {
+        account.debit(amount);
+        return account.getBalance();
+      }
+      return 0;
+    }
+  }]);
+
+  return BankDatabase;
 }();
 
 exports.default = BankDatabase;
@@ -159,20 +169,20 @@ var _ATM2 = _interopRequireDefault(_ATM);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = {
-    authenticate: function authenticate() {
-        var atm = new _ATM2.default();
-        return atm.authenticateUser(12345, 1111);
-    },
+  authenticate: function authenticate() {
+    var atm = new _ATM2.default();
+    return atm.authenticateUser(12345, 1111);
+  },
 
-    balance: function balance() {
-        var atm = new _ATM2.default();
-        return atm.getBalance(12345);
-    },
+  balance: function balance() {
+    var atm = new _ATM2.default();
+    return atm.getBalance(12345);
+  },
 
-    withdraw: function withdraw() {
-        var atm = new _ATM2.default();
-        return atm.withdraw(12345, 1000);
-    }
+  withdraw: function withdraw() {
+    var atm = new _ATM2.default();
+    return atm.withdraw(12345, 1000);
+  }
 };
 
 /***/ }),
@@ -183,7 +193,7 @@ module.exports = {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -201,37 +211,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ATM = function () {
-    function ATM() {
-        _classCallCheck(this, ATM);
+  function ATM() {
+    _classCallCheck(this, ATM);
+  }
 
-        var _isUserAuthenticated = new WeakMap();
-        var _currentAccountNumber = new WeakMap();
-
-        _isUserAuthenticated.set(this, false);
-        _currentAccountNumber.set(this, 0);
+  _createClass(ATM, [{
+    key: 'authenticateUser',
+    value: function authenticateUser(accNumber, pin) {
+      var database = new _BankDatabase2.default();
+      return database.authenticateUser(accNumber, pin);
     }
+  }, {
+    key: 'getBalance',
+    value: function getBalance(accNumber) {
+      var transact = new _Transaction2.default(accNumber, 1, 0);
+      return transact.transact();
+    }
+  }, {
+    key: 'withdraw',
+    value: function withdraw(accNumber, amount) {
+      var transact = new _Transaction2.default(accNumber, 2, amount);
+      return transact.transact();
+    }
+  }]);
 
-    _createClass(ATM, [{
-        key: 'authenticateUser',
-        value: function authenticateUser(accNumber, pin) {
-            var database = new _BankDatabase2.default();
-            return database.authenticateUser(accNumber, pin);
-        }
-    }, {
-        key: 'getBalance',
-        value: function getBalance(accNumber) {
-            var transact = new _Transaction2.default(accNumber, 1, 0);
-            return transact.transact();
-        }
-    }, {
-        key: 'withdraw',
-        value: function withdraw(accNumber, amount) {
-            var transact = new _Transaction2.default(accNumber, 2, amount);
-            return transact.transact();
-        }
-    }]);
-
-    return ATM;
+  return ATM;
 }();
 
 exports.default = ATM;
@@ -244,7 +248,7 @@ exports.default = ATM;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -252,45 +256,55 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Account = function () {
-    function Account(accountNumber, pin, availableBalance, totalBalance) {
-        _classCallCheck(this, Account);
+  function Account(accountNumber, pin, availableBalance) {
+    _classCallCheck(this, Account);
 
-        this._accountNumber = new WeakMap();
-        this._pin = new WeakMap();
-        this._balance = new WeakMap();
+    // Initialize attributes with WeakMap to encapsulate the data
+    this.accountNumber = new WeakMap();
+    this.pin = new WeakMap();
+    this.balance = new WeakMap();
 
-        this._accountNumber.set(this, accountNumber);
-        this._pin.set(this, pin);
-        this._balance.set(this, availableBalance);
+    // Initialize attributes with parameters
+    this.accountNumber.set(this, accountNumber);
+    this.pin.set(this, pin);
+    this.balance.set(this, availableBalance);
+  }
+
+  // Validate user pin
+
+
+  _createClass(Account, [{
+    key: "validatePin",
+    value: function validatePin(userPin) {
+      return userPin === this.pin.get(this);
     }
 
-    _createClass(Account, [{
-        key: "validatePin",
-        value: function validatePin(userPin) {
-            return userPin === this._pin.get(this);
-        }
-    }, {
-        key: "getBalance",
-        value: function getBalance() {
-            return this._balance.get(this);
-        }
-    }, {
-        key: "debit",
-        value: function debit(amount) {
-            if (this._balance < amount) {
-                return 0;
-            } else {
-                this._balance.set(this, this._balance.get(this) - amount);
-            }
-        }
-    }, {
-        key: "getAccountNumber",
-        value: function getAccountNumber() {
-            return this._accountNumber.get(this);
-        }
-    }]);
+    // Get account balance
 
-    return Account;
+  }, {
+    key: "getBalance",
+    value: function getBalance() {
+      return this.balance.get(this);
+    }
+
+    // Debit user account
+
+  }, {
+    key: "debit",
+    value: function debit(amount) {
+      this.balance.set(this, this.balance.get(this) - amount);
+    }
+
+    // Get account number
+
+  }, {
+    key: "getAccountNumber",
+    value: function getAccountNumber() {
+      return this.accountNumber.get(this);
+    }
+  }]);
+
+  return Account;
 }();
 
 exports.default = Account;
@@ -303,7 +317,7 @@ exports.default = Account;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -320,89 +334,91 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// Generalization class for all transactions
 var Transaction = function () {
-    function Transaction(accNumber, type, amount) {
-        _classCallCheck(this, Transaction);
+  function Transaction(accNumber, type, amount) {
+    _classCallCheck(this, Transaction);
 
-        this.accNumber = accNumber;
-        this.type = type;
-        this.amount = amount;
+    this.accNumber = accNumber;
+    this.type = type;
+    this.amount = amount;
+  }
+
+  _createClass(Transaction, [{
+    key: 'transact',
+    value: function transact() {
+      var type = this.type;
+      switch (type) {
+        case 1:
+          var inquiry = new BalanceInquiry(this.accNumber);
+          return inquiry.transact();
+          break;
+        case 2:
+          var withdraw = new Withdrawal(this.accNumber, this.amount);
+          return withdraw.transact();
+          break;
+        default:
+          return undefined;
+      }
     }
+  }]);
 
-    _createClass(Transaction, [{
-        key: 'transact',
-        value: function transact() {
-            switch (this.type) {
-                case 1:
-                    var inquiry = new BalanceInquiry(this.accNumber);
-                    return inquiry.transact();
-                    break;
-                case 2:
-                    var withdraw = new Withdrawal(this.accNumber, this.amount);
-                    return withdraw.transact();
-                    break;
-                default:
-                    return undefined;
-            }
-        }
-    }]);
-
-    return Transaction;
+  return Transaction;
 }();
 
-//Balance Inquiry class, returns account balance
+// Balance Inquiry class, returns account balance
 
 
 exports.default = Transaction;
 
 var BalanceInquiry = function (_Transaction) {
-    _inherits(BalanceInquiry, _Transaction);
+  _inherits(BalanceInquiry, _Transaction);
 
-    function BalanceInquiry(accNumber) {
-        _classCallCheck(this, BalanceInquiry);
+  function BalanceInquiry(accNumber) {
+    _classCallCheck(this, BalanceInquiry);
 
-        var _this = _possibleConstructorReturn(this, (BalanceInquiry.__proto__ || Object.getPrototypeOf(BalanceInquiry)).call(this, accNumber, 1, 0));
+    var _this = _possibleConstructorReturn(this, (BalanceInquiry.__proto__ || Object.getPrototypeOf(BalanceInquiry)).call(this, accNumber, 1, 0));
 
-        _this.accNumber = accNumber;
-        return _this;
+    _this.accNumber = accNumber;
+    return _this;
+  }
+
+  _createClass(BalanceInquiry, [{
+    key: 'transact',
+    value: function transact() {
+      var database = new _BankDatabase2.default();
+      return database.getBalance(this.accNumber);
     }
+  }]);
 
-    _createClass(BalanceInquiry, [{
-        key: 'transact',
-        value: function transact() {
-            var database = new _BankDatabase2.default();
-            return database.getBalance(this.accNumber);
-        }
-    }]);
-
-    return BalanceInquiry;
+  return BalanceInquiry;
 }(Transaction);
 
-//Withdrawal class, debits accounts and returns account balance
+// Withdrawal class, debits accounts and returns account balance
 
 
 var Withdrawal = function (_Transaction2) {
-    _inherits(Withdrawal, _Transaction2);
+  _inherits(Withdrawal, _Transaction2);
 
-    function Withdrawal(accNumber, amount) {
-        _classCallCheck(this, Withdrawal);
+  function Withdrawal(accNumber, amount) {
+    _classCallCheck(this, Withdrawal);
 
-        var _this2 = _possibleConstructorReturn(this, (Withdrawal.__proto__ || Object.getPrototypeOf(Withdrawal)).call(this, accNumber, 2, amount));
+    var _this2 = _possibleConstructorReturn(this, (Withdrawal.__proto__ || Object.getPrototypeOf(Withdrawal)).call(this, accNumber, 2, amount));
 
-        _this2.accNumber = accNumber;
-        _this2.amount = amount;
-        return _this2;
+    _this2.accNumber = accNumber;
+    _this2.amount = amount;
+    return _this2;
+  }
+
+  _createClass(Withdrawal, [{
+    key: 'transact',
+    value: function transact() {
+      var database = new _BankDatabase2.default();
+      return database.withdraw(this.accNumber, this.amount);
     }
+  }]);
 
-    _createClass(Withdrawal, [{
-        key: 'transact',
-        value: function transact() {
-            var database = new _BankDatabase2.default();
-            return database.withdraw(this.accNumber, this.amount);
-        }
-    }]);
-
-    return Withdrawal;
+  return Withdrawal;
 }(Transaction);
 
 /***/ })

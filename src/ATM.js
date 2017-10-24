@@ -1,27 +1,19 @@
-import BankDatabase from './BankDatabase.js';
-import Transaction from './Transaction.js';
+import BankDatabase from './BankDatabase';
+import Transaction from './Transaction';
 
-export default class ATM{
-    constructor(){
-        let _isUserAuthenticated = new WeakMap();
-        let _currentAccountNumber = new WeakMap();
+export default class ATM {
+  authenticateUser(accNumber, pin) {
+    const database = new BankDatabase();
+    return database.authenticateUser(accNumber, pin);
+  }
 
-        _isUserAuthenticated.set(this, false);
-        _currentAccountNumber.set(this, 0);
-    }
+  getBalance(accNumber) {
+    const transact = new Transaction(accNumber, 1, 0);
+    return transact.transact();
+  }
 
-    authenticateUser(accNumber, pin){
-        let database = new BankDatabase();
-        return database.authenticateUser(accNumber, pin);
-    }
-
-    getBalance(accNumber){
-        let transact = new Transaction(accNumber, 1, 0);
-        return transact.transact();
-    }
-
-    withdraw(accNumber, amount){
-        let transact = new Transaction(accNumber, 2, amount);
-        return transact.transact();
-    }
+  withdraw(accNumber, amount) {
+    const transact = new Transaction(accNumber, 2, amount);
+    return transact.transact();
+  }
 }
