@@ -9,16 +9,13 @@ export default class Transaction {
   }
 
   transact() {
-    const type = this.type;
-    switch (type) {
+    switch (this.type) {
       case 1:
         const inquiry = new BalanceInquiry(this.accNumber);
         return inquiry.transact();
-        break;
       case 2:
         const withdraw = new Withdrawal(this.accNumber, this.amount);
         return withdraw.transact();
-        break;
       default:
         return undefined;
     }

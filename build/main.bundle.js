@@ -347,16 +347,13 @@ var Transaction = function () {
   _createClass(Transaction, [{
     key: 'transact',
     value: function transact() {
-      var type = this.type;
-      switch (type) {
+      switch (this.type) {
         case 1:
           var inquiry = new BalanceInquiry(this.accNumber);
           return inquiry.transact();
-          break;
         case 2:
           var withdraw = new Withdrawal(this.accNumber, this.amount);
           return withdraw.transact();
-          break;
         default:
           return undefined;
       }
