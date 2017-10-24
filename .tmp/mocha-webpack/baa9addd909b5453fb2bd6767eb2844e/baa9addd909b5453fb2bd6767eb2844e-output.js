@@ -1825,17 +1825,17 @@ var balance = __webpack_require__(9).balance;
 var withdraw = __webpack_require__(9).withdraw;
 
 describe('authenticate', function () {
-    it('authenticate should return true', function () {
-        assert.equal(authenticate(12345, 1111), true);
-    });
+  it('authenticate should return true', function () {
+    assert.equal(authenticate(12345, 1111), true);
+  });
 
-    it('balance should return 2000', function () {
-        assert.equal(balance(), 2000);
-    });
+  it('balance should return 2000', function () {
+    assert.equal(balance(), 2000);
+  });
 
-    it('balance should return 1000', function () {
-        assert.equal(withdraw(), 1000);
-    });
+  it('balance should return 1000', function () {
+    assert.equal(withdraw(), 1000);
+  });
 });
 
 /***/ }),
@@ -10887,11 +10887,15 @@ var Transaction = function () {
     value: function transact() {
       switch (this.type) {
         case 1:
-          var inquiry = new BalanceInquiry(this.accNumber);
-          return inquiry.transact();
+          {
+            var inquiry = new BalanceInquiry(this.accNumber);
+            return inquiry.transact();
+          }
         case 2:
-          var withdraw = new Withdrawal(this.accNumber, this.amount);
-          return withdraw.transact();
+          {
+            var withdraw = new Withdrawal(this.accNumber, this.amount);
+            return withdraw.transact();
+          }
         default:
           return undefined;
       }

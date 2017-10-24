@@ -349,11 +349,15 @@ var Transaction = function () {
     value: function transact() {
       switch (this.type) {
         case 1:
-          var inquiry = new BalanceInquiry(this.accNumber);
-          return inquiry.transact();
+          {
+            var inquiry = new BalanceInquiry(this.accNumber);
+            return inquiry.transact();
+          }
         case 2:
-          var withdraw = new Withdrawal(this.accNumber, this.amount);
-          return withdraw.transact();
+          {
+            var withdraw = new Withdrawal(this.accNumber, this.amount);
+            return withdraw.transact();
+          }
         default:
           return undefined;
       }
